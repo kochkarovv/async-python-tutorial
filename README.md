@@ -10,127 +10,153 @@ Python's `asyncio` library enables writing clean, efficient, and scalable code f
 
 ### Prerequisites
 - Python 3.7 or higher
-- [uv](https://docs.astral.sh/uv/) - Fast Python package installer and resolver
+- uv package manager (recommended) or pip
 
-### Quick Start with uv (Recommended)
-```bash
-# Install uv if you haven't already
-curl -LsSf https://astral.sh/uv/install.sh | sh
+### Installation with uv (recommended)
+1. Clone or download this repository
+2. Install dependencies:
+   ```bash
+   uv sync
+   ```
 
-# Clone or download this repository
-cd asyncio_tutorial
-
-# Dependencies are automatically managed by uv
-# No manual installation needed!
-```
-
-### Alternative Setup with pip
-If you prefer using pip:
+### Installation with pip
 ```bash
 pip install -r requirements.txt
 ```
 
-## Running Examples
-
-### Option 1: Interactive Tutorial (Recommended)
-Run all examples in sequence with clear explanations:
-```bash
-uv run python run_examples.py
-```
-
-### Option 2: Individual Examples
-Run any specific example using the commands below.
-
 ## Examples
 
 ### 1. Hello World Examples
+- **`01_hello_sync.py`** - Synchronous version showing blocking behavior
+- **`02_hello_async_basic.py`** - Basic async/await syntax
+- **`03_hello_async_concurrent.py`** - Concurrent execution with asyncio.gather()
 
-**`01_hello_sync.py`** - Synchronous version showing blocking behavior
+**Run them:**
 ```bash
-uv run python 01_hello_sync.py
+python 01_hello_sync.py
+python 02_hello_async_basic.py
+python 03_hello_async_concurrent.py
 ```
-
-**`02_hello_async_basic.py`** - Basic async/await syntax
-```bash
-uv run python 02_hello_async_basic.py
-```
-
-**`03_hello_async_concurrent.py`** - Concurrent execution with asyncio.gather()
-```bash
-uv run python 03_hello_async_concurrent.py
-```
-
-**Performance comparison:**
-- Sync: ~2 seconds (sequential)
-- Async: ~2 seconds (concurrent, but only one task takes 2s)
 
 ### 2. Web Fetching Examples
+- **`04_web_fetching_sync.py`** - Synchronous HTTP requests with requests library
+- **`05_web_fetching_async.py`** - Asynchronous HTTP requests with aiohttp
 
-**`04_web_fetching_sync.py`** - Synchronous HTTP requests with requests library
+**Run them:**
 ```bash
-uv run python 04_web_fetching_sync.py
+python 04_web_fetching_sync.py
+python 05_web_fetching_async.py
 ```
-
-**`05_web_fetching_async.py`** - Asynchronous HTTP requests with aiohttp
-```bash
-uv run python 05_web_fetching_async.py
-```
-
-**Performance comparison:**
-- Sync: ~3.36 seconds (sequential requests)
-- Async: ~0.89 seconds (concurrent requests) - **4x faster!**
 
 ### 3. File Operations Examples
+- **`06_file_reading_sync.py`** - Synchronous file reading
+- **`07_file_reading_async.py`** - Asynchronous file reading with aiofiles
 
-**`06_file_reading_sync.py`** - Synchronous file reading
+**Run them:**
 ```bash
-uv run python 06_file_reading_sync.py
+python 06_file_reading_sync.py
+python 07_file_reading_async.py
 ```
-
-**`07_file_reading_async.py`** - Asynchronous file reading with aiofiles
-```bash
-uv run python 07_file_reading_async.py
-```
-
-**Key difference:** Async version starts reading all files simultaneously
 
 ### 4. Advanced Examples
+- **`08_async_sync_hybrid.py`** - Mixing async and sync code using run_in_executor
+- **`09_future_object.py`** - Working with Future objects and callbacks
 
-**`08_async_sync_hybrid.py`** - Mixing async and sync code using run_in_executor
+**Run them:**
 ```bash
-uv run python 08_async_sync_hybrid.py
+python 08_async_sync_hybrid.py
+python 09_future_object.py
 ```
 
-**`09_future_object.py`** - Working with Future objects and callbacks
+### 5. FastAPI Background Tasks
+- **`10_fastapi_background_tasks.py`** - Simple FastAPI background task execution
+- **`test_fastapi_background.py`** - Test client for simple background tasks
+
+**Run the simple background tasks server:**
 ```bash
-uv run python 09_future_object.py
+python 10_fastapi_background_tasks.py
 ```
 
-## Quick Command Reference
-
-Copy and paste these commands to run examples individually:
-
+**Test the endpoints (in another terminal):**
 ```bash
-# Hello World Examples
-uv run python 01_hello_sync.py              # Synchronous blocking
-uv run python 02_hello_async_basic.py       # Basic async/await
-uv run python 03_hello_async_concurrent.py  # Concurrent execution
-
-# Web Fetching Examples (great for performance comparison)
-uv run python 04_web_fetching_sync.py       # ~3.36 seconds
-uv run python 05_web_fetching_async.py      # ~0.89 seconds (4x faster!)
-
-# File Operations Examples
-uv run python 06_file_reading_sync.py       # Sequential file reading
-uv run python 07_file_reading_async.py      # Concurrent file reading
-
-# Advanced Examples
-uv run python 08_async_sync_hybrid.py       # Sync/async integration
-uv run python 09_future_object.py           # Future objects and callbacks
-
-# Interactive Tutorial Runner
-uv run python run_examples.py               # Run all examples with explanations
+python test_fastapi_background.py
 ```
+
+**Available endpoints:**
+- `POST /start-jobs` - Start two background jobs (3s and 6s)
+- `GET /` - API information
+
+### 6. FastAPI File Upload with Background Processing
+- **`11_fastapi_file_upload_background.py`** - File upload with background processing
+- **`test_file_upload_background.py`** - Test client for file upload
+
+**Run the file upload server:**
+```bash
+python 11_fastapi_file_upload_background.py
+```
+
+**Test file upload (in another terminal):**
+```bash
+python test_file_upload_background.py
+```
+
+**Available endpoints:**
+- `POST /upload` - Upload file with background processing
+- `GET /uploads` - List uploaded files
+- `DELETE /uploads/{filename}` - Delete uploaded file
+- `GET /` - API information
+
+### 7. Celery Distributed Task Queue
+- **`12_celery_worker_tasks.py`** - Distributed task processing with Celery and Redis
+- **`docker-compose.yml`** - Redis setup for Celery message broker
+- **Flower** - Web-based monitoring interface for Celery
+
+**Prerequisites:**
+```bash
+# Install dependencies (including flower)
+uv sync
+
+# Start Redis with Docker (on port 6380)
+docker-compose up -d
+
+# Verify Redis is running
+docker-compose ps
+```
+
+**Run Celery worker (in terminal 1):**
+```bash
+celery -A 12_celery_worker_tasks worker --loglevel=info
+```
+
+**Run Flower monitoring (in terminal 2):**
+```bash
+celery -A 12_celery_worker_tasks flower --port=5555
+```
+
+**Run the demo (in terminal 3):**
+```bash
+python 12_celery_worker_tasks.py
+```
+
+**Flower Web Interface:**
+- Open http://localhost:5555 in your browser
+- Monitor tasks in real-time as they execute
+- View worker statistics and performance
+- Track task progress and results
+- Beautiful dashboard with charts and metrics
+
+**What you'll see:**
+- Quick task completes in ~2 seconds
+- Slow task hits timeout at 10-15 seconds
+- Tasks run in separate worker processes
+- Progress monitoring and timeout handling
+- Real-time updates in Flower web interface
+
+**Key differences from FastAPI background tasks:**
+- Tasks survive application restarts
+- Run in separate processes/machines
+- Built-in retry and monitoring
+- Perfect for heavy computational work
 
 ## Key Concepts Demonstrated
 
@@ -146,15 +172,12 @@ uv run python run_examples.py               # Run all examples with explanations
 - **Hybrid Approach**: Integrating synchronous code in async applications
 - **Error Handling**: Managing exceptions in concurrent environments
 
-## Performance Results (Real Examples)
+## Performance Comparisons
 
-Based on actual test runs:
-
-| Operation | Synchronous | Asynchronous | Improvement |
-|-----------|-------------|--------------|-------------|
-| Hello World (concurrent) | 3.0s (if sequential) | 2.0s | 33% faster |
-| Web Fetching (3 URLs) | 3.36s | 0.89s | **278% faster** |
-| File Reading | <0.001s | 0.002s | Similar (small files) |
+Each synchronous example is paired with its asynchronous counterpart to demonstrate:
+- **Execution Time**: Async versions typically complete faster due to concurrency
+- **Resource Usage**: Better utilization of I/O wait times
+- **Scalability**: Ability to handle multiple operations simultaneously
 
 ## Understanding the Output
 
@@ -181,8 +204,7 @@ async def main():
 
 asyncio.run(main())
 
-# Concurrent pattern with uv
-# uv run python script.py
+# Concurrent pattern
 async def main():
     await asyncio.gather(
         task1(),
@@ -202,39 +224,10 @@ async def safe_task():
         return None
 ```
 
-## Project Structure
-
-```
-asyncio_tutorial/
-├── 01_hello_sync.py              # Basic sync example
-├── 02_hello_async_basic.py       # Basic async example
-├── 03_hello_async_concurrent.py  # Concurrent async example
-├── 04_web_fetching_sync.py       # Sync web requests
-├── 05_web_fetching_async.py      # Async web requests
-├── 06_file_reading_sync.py       # Sync file operations
-├── 07_file_reading_async.py      # Async file operations
-├── 08_async_sync_hybrid.py       # Mixing sync/async
-├── 09_future_object.py           # Future objects
-├── run_examples.py               # Interactive tutorial runner
-├── pyproject.toml                # uv project configuration
-├── uv.lock                       # uv lock file
-├── requirements.txt              # Pip requirements
-└── README.md                     # This file
-```
-
-## Why uv?
-
-We recommend `uv` because it:
-- **Installs packages 10-100x faster** than pip
-- **Automatically manages virtual environments**
-- **Resolves dependencies more reliably**
-- **Works seamlessly** with existing Python projects
-- **No manual venv creation needed**
-
 ## Troubleshooting
 
 ### Common Issues
-1. **Import Errors**: Run with `uv run python script.py` to ensure dependencies are available
+1. **Import Errors**: Ensure all dependencies are installed
 2. **Network Timeouts**: Some examples require internet connectivity
 3. **File Permissions**: File examples create temporary files in the current directory
 
@@ -245,26 +238,23 @@ We recommend `uv` because it:
 
 ## Learning Path
 
-1. **Start with basic examples** (01-03) to understand async/await
-2. **Compare performance** with web fetching examples (04-05)
-3. **Explore file operations** (06-07) to see concurrent I/O
-4. **Master advanced patterns** (08-09) for real-world applications
-5. **Use the interactive runner** (`run_examples.py`) for presentations
+1. Start with basic hello world examples (01-03)
+2. Move to I/O operations (04-07)
+3. Explore advanced patterns (08-09)
+4. Experiment with modifications and extensions
 
 ## Next Steps
 
 After completing these examples, consider exploring:
-- **Web frameworks**: FastAPI, aiohttp web server
-- **Database drivers**: asyncpg (PostgreSQL), aiomysql (MySQL)
-- **Message queues**: aio-pika (RabbitMQ), aiokafka (Kafka)
-- **Real-time apps**: WebSockets with aiohttp
-- **Testing**: pytest-asyncio for testing async code
+- Web frameworks like FastAPI or aiohttp web server
+- Database async drivers (asyncpg, aiomysql)
+- Message queues and pub/sub patterns
+- Real-time applications with WebSockets
 
 ## References
 
 - [Original Article](https://medium.com/@moraneus/mastering-pythons-asyncio-a-practical-guide-0a673265cf04)
 - [Python asyncio Documentation](https://docs.python.org/3/library/asyncio.html)
-- [uv Documentation](https://docs.astral.sh/uv/)
 - [aiohttp Documentation](https://docs.aiohttp.org/)
 - [aiofiles Documentation](https://github.com/Tinche/aiofiles)
 
